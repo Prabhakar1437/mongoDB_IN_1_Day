@@ -1,0 +1,1094 @@
+
+test> show dbs //Show database
+Prabh      88.00 KiB
+Student   216.00 KiB
+Students  152.00 KiB
+admin      40.00 KiB
+config     60.00 KiB
+hotels    180.00 KiB
+local      72.00 KiB
+test       72.00 KiB
+vatsdb     80.00 KiB
+voting    108.00 KiB
+test> use student1 create database
+switched to db student1
+student1> show dbs
+Prabh      88.00 KiB
+Student   216.00 KiB
+Students  152.00 KiB
+admin      40.00 KiB
+config     60.00 KiB
+hotels    180.00 KiB
+local      72.00 KiB
+test       72.00 KiB
+vatsdb     80.00 KiB
+voting    108.00 KiB
+student1> use admin
+switched to db admin
+admin> show dbs
+Prabh      88.00 KiB
+Student   216.00 KiB
+Students  152.00 KiB
+admin      40.00 KiB
+config     72.00 KiB
+hotels    180.00 KiB
+local      72.00 KiB
+test       72.00 KiB
+vatsdb     80.00 KiB
+voting    108.00 KiB
+admin> use student1
+switched to db student1
+student1> db.createCollection('data') // Create collections
+{ ok: 1 }
+student1> show collections // show collections
+data
+student1> show dbs
+Prabh      88.00 KiB
+Student   216.00 KiB
+Students  152.00 KiB
+admin      40.00 KiB
+config    108.00 KiB
+hotels    180.00 KiB
+local      72.00 KiB
+student1    8.00 KiB
+test       72.00 KiB
+vatsdb     80.00 KiB
+voting    108.00 KiB
+student1> show collections
+data
+student1> db.data.drop()  //delete collections
+true
+student1> show collections
+
+student1> db.dropDatabase()  //delete database
+{ ok: 1, dropped: 'student1' }
+student1> show dbs
+Prabh      88.00 KiB
+Student   216.00 KiB
+Students  152.00 KiB
+admin      40.00 KiB
+config    108.00 KiB
+hotels    180.00 KiB
+local      72.00 KiB
+test       72.00 KiB
+vatsdb     80.00 KiB
+voting    108.00 KiB
+student1>
+
+//Insert 
+1.single
+StudentData> db.data.insertOne({'name':'Vats',age:21})
+{
+  acknowledged: true,
+  insertedId: ObjectId('6632117042c0c903159f990a')
+}
+2.Many
+StudentData> db.data.insertMany([{'name':'Vats',age:21},{'name':'Vatsya',age:22},{'name':'Golu',age:25}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6632120842c0c903159f990b'),
+    '1': ObjectId('6632120842c0c903159f990c'),
+    '2': ObjectId('6632120842c0c903159f990d')
+  }
+}
+
+//Read the data 
+StudentData> db.data.find()
+[
+  { _id: ObjectId('6632117042c0c903159f990a'), name: 'Vats', age: 21 },
+  { _id: ObjectId('6632120842c0c903159f990b'), name: 'Vats', age: 21 },
+  {
+    _id: ObjectId('6632120842c0c903159f990c'),
+    name: 'Vatsya',
+    age: 22
+  },
+  { _id: ObjectId('6632120842c0c903159f990d'), name: 'Golu', age: 25 }
+]
+StudentData>
+
+StudentData> db.data.find({'name':'Vats'})
+[
+  { _id: ObjectId('6632117042c0c903159f990a'), name: 'Vats', age: 21 },
+  { _id: ObjectId('6632120842c0c903159f990b'), name: 'Vats', age: 21 },
+  {
+    _id: ObjectId('6632131742c0c903159f990e'),
+    name: 'Vats',
+    age: 21,
+    'course name': 'cs'
+  }
+]
+StudentData> db.data.findOne({'name':'Vats'})
+{ _id: ObjectId('6632117042c0c903159f990a'), name: 'Vats', age: 21 }
+
+//COMPARISION OPERATOR
+
+shop> db.products.find({'price':{$eq:699}})
+[
+  {
+    _id: ObjectId('64c23601e32f4a51b19b9262'),
+    name: 'Smartphone Model X',
+    company: '64c23350e32f4a51b19b9230',
+    price: 699,
+    colors: [ '#000000', '#ffffff', '#ff0000' ],
+    image: '/images/product-smartphone.png',
+    category: '64c2342de32f4a51b19b924e',
+    isFeatured: false
+  },
+  {
+    _id: ObjectId('64c236a2e32f4a51b19b9280'),
+    name: 'Elegant Dining Table',
+    company: '64c23350e32f4a51b19b9239',
+    price: 699,
+    colors: [ '#ffffff', '#ffcc00', '#cc9900' ],
+    image: '/images/product-dining-table.png',
+    category: '64c2342de32f4a51b19b925a',
+    isFeatured: true
+  },
+  {
+    _id: ObjectId('64c23707e32f4a51b19b9295'),
+    name: 'Elegant Dining Table',
+    company: '64c23350e32f4a51b19b9239',
+    price: 699,
+    colors: [ '#ffffff', '#ffcc00', '#cc9900' ],
+    image: '/images/product-dining-table.png',
+    category: '64c2342de32f4a51b19b925a',
+    isFeatured: true
+  },
+  {
+    _id: ObjectId('64c23825e32f4a51b19b92ba'),
+    name: 'Smartphone',
+    company: '64c23350e32f4a51b19b9236',
+    price: 699,
+    colors: [ '#333333', '#99cc00', '#ffcc00' ],
+    image: '/images/product-smartphone.png',
+    category: '64c2342de32f4a51b19b9251',
+    isFeatured: true
+  },
+  {
+    _id: ObjectId('64c23eb1f1b9c8985b80fd33'),
+    name: 'Tasty Concrete Mouse',
+    company: ObjectId('64c23350e32f4a51b19b9242'),
+    price: 699,
+    colors: [ '#2d0a6a' ],
+    image: '/images/product-Modern.png',
+    category: ObjectId('64c2342de32f4a51b19b9251'),
+    isFeatured: false,
+    __v: 0
+  },
+  {
+    _id: ObjectId('64c23edf9dc1fb2f8560206e'),
+    name: 'Electronic Bronze Mouse',
+    company: ObjectId('64c23350e32f4a51b19b9238'),
+    price: 699,
+    colors: [ '#2b3311' ],
+    image: '/images/product-Incredible.png',
+    category: ObjectId('64c2342de32f4a51b19b925e'),
+    isFeatured: false,
+    __v: 0
+  },
+  {
+    _id: ObjectId('64c23edf9dc1fb2f856026ba'),
+    name: 'Fantastic Bronze Bacon',
+    company: ObjectId('64c23350e32f4a51b19b9237'),
+    price: 699,
+    colors: [ '#335c62' ],
+    image: '/images/product-Modern.png',
+    category: ObjectId('64c2342de32f4a51b19b9261'),
+    isFeatured: false,
+    __v: 0
+  },
+  {
+    _id: ObjectId('64c23edf9dc1fb2f856026e7'),
+    name: 'Sleek Soft Shirt',
+    company: ObjectId('64c23350e32f4a51b19b9236'),
+    price: 699,
+    colors: [ '#396b56' ],
+    image: '/images/product-Ergonomic.png',
+    category: ObjectId('64c2342de32f4a51b19b925c'),
+    isFeatured: false,
+    __v: 0
+  },
+  {
+    _id: ObjectId('64c23edf9dc1fb2f8560293e'),
+    name: 'Oriental Rubber Gloves',
+    company: ObjectId('64c23350e32f4a51b19b924c'),
+    price: 699,
+    colors: [ '#2f4575' ],
+    image: '/images/product-Ergonomic.png',
+    category: ObjectId('64c2342de32f4a51b19b925e'),
+    isFeatured: false,
+    __v: 0
+  },
+  {
+    _id: ObjectId('64c23f13f8ffc4957dc4f3e0'),
+    name: 'Fantastic Soft Ball',
+    company: ObjectId('64c23350e32f4a51b19b9230'),
+    price: 699,
+    colors: [ '#2f787d' ],
+    image: '/images/product-Luxurious.png',
+    category: ObjectId('64c2342de32f4a51b19b925c'),
+    isFeatured: false,
+    __v: 0
+  },
+  {
+    _id: ObjectId('64c23f13f8ffc4957dc4f6c5'),
+    name: 'Licensed Granite Table',
+    company: ObjectId('64c23350e32f4a51b19b924d'),
+    price: 699,
+    colors: [ '#394827' ],
+    image: '/images/product-Luxurious.png',
+    category: ObjectId('64c2342de32f4a51b19b925a'),
+    isFeatured: false,
+    __v: 0
+  },
+  {
+    _id: ObjectId('64c23f13f8ffc4957dc4fa7f'),
+    name: 'Licensed Soft Table',
+    company: ObjectId('64c23350e32f4a51b19b9240'),
+    price: 699,
+    colors: [ '#233376' ],
+    image: '/images/product-Handmade.png',
+    category: ObjectId('64c2342de32f4a51b19b924e'),
+    isFeatured: false,
+    __v: 0
+  },
+  {
+    _id: ObjectId('64c23f13f8ffc4957dc4fbbb'),
+    name: 'Small Concrete Table',
+    company: ObjectId('64c23350e32f4a51b19b923c'),
+    price: 699,
+    colors: [ '#0d621e' ],
+    image: '/images/product-Electronic.png',
+    category: ObjectId('64c2342de32f4a51b19b925c'),
+    isFeatured: false,
+    __v: 0
+  }
+]
+shop> db.products.find({'price':{$eq:699}}).count()  //give count
+13
+shop>
+db.products.find({'price':{$ne:699}}) //use to find notequal to
+
+db.products.find({'price':{$ne:699}}).count() //give count
+
+shop> db.products.find({'price':{$gt:699}}).count() //greater than
+3053
+shop> db.products.find({'price':{$gte:699}}).count()  //greater than equalto
+shop> db.products.find({'price':{$lt:699}}).count() //less than
+7294
+shop> db.products.find({'price':{$lte:699}}).count() // less than equalto
+7307
+db.products.find({'price':{$in:[699,129,69]}}) // in operator mean price equalto this only
+ db.products.find({'price':{$in:[699,129,69]}}).count() // count
+ 
+ db.products.find({'price':{$nin:[699,129,69]}}) //not in
+ 
+ db.products.find({'price':{$nin:[699,129,69]}}).count() //count
+ 
+ //Introduction to Cursors
+ 
+ shop> db.products.find({'price':{$in:[699,129,69]}}).count()
+51
+shop> db.products.find({'price':{$in:[699,129,69]}}).limit(10)
+
+shop> db.products.find({'price':{$in:[699,129,69]}}).limit(5).skip(2)
+
+ db.products.find({'price':{$in:[699,129,69]}}).limit(5).sort({'price':1})
+ 
+ //:LOGICAL OPERATOR
+ 
+ $and $or $not $nor
+ db.products.find({$and:[{'price':{$gt:100}},{'name':'Diamond Ring'}]})
+[
+  {
+    _id: ObjectId('64c236a2e32f4a51b19b9281'),
+    name: 'Diamond Ring',
+    company: '64c23350e32f4a51b19b923a',
+    price: 1999,
+    colors: [ '#000000', '#cc6600', '#663300' ],
+    image: '/images/product-diamond-ring.png',
+    category: '64c2342de32f4a51b19b9259',
+    isFeatured: false
+  },
+  {
+    _id: ObjectId('64c23707e32f4a51b19b9296'),
+    name: 'Diamond Ring',
+    company: '64c23350e32f4a51b19b923a',
+    price: 1999,
+    colors: [ '#000000', '#cc6600', '#663300' ],
+    image: '/images/product-diamond-ring.png',
+    category: '64c2342de32f4a51b19b9259',
+    isFeatured: false
+  }
+]
+
+NOTE:- In MongoDB, when you provide multiple-fields within a 
+single query document, MongoDB
+ treats as an implicit AND operations.
+ //AND
+ db.products.find({'price':{$gt:0},'name':'Diamond Ring'})
+ //OR
+  db.products.find({$or:[{'price':{$gt:1000}},{'name':'Diamond Ring'}]})
+  //NOR
+   db.products.find({$nor:[{'price':{$gt:1000}},{'name':'Diamond Ring'}]})
+   //NOT
+   shop> db.products.find({'price':{$not:{$eq:100}}}).count()
+   
+   
+ //Complex Expressions :-
+ shop> db.products.find({$expr:{$gt:['$price',1340]}})
+[
+  {
+    _id: ObjectId('64c236a2e32f4a51b19b9281'),
+    name: 'Diamond Ring',
+    company: '64c23350e32f4a51b19b923a',
+    price: 1999,
+    colors: [ '#000000', '#cc6600', '#663300' ],
+    image: '/images/product-diamond-ring.png',
+    category: '64c2342de32f4a51b19b9259',
+    isFeatured: false
+  },
+  {
+    _id: ObjectId('64c23707e32f4a51b19b9296'),
+    name: 'Diamond Ring',
+    company: '64c23350e32f4a51b19b923a',
+    price: 1999,
+    colors: [ '#000000', '#cc6600', '#663300' ],
+    image: '/images/product-diamond-ring.png',
+    category: '64c2342de32f4a51b19b9259',
+    isFeatured: false
+  }
+]
+
+ db.sales.find({ $expr: { $gt: [{ $multiply: ['$quantity','$price'] }, '$targetPrice'] } } )
+ 
+ [
+  { _id: 4, quantity: 5, price: 55, targetPrice: 150 },
+  { _id: 3, quantity: 6, price: 35, targetPrice: 100 },
+  { _id: 5, quantity: 5, price: 55, targetPrice: 150 },
+  { _id: 1, quantity: 10, price: 15, targetPrice: 120 },
+  { _id: 2, quantity: 5, price: 25, targetPrice: 100 }
+]
+
+//* Elements Operator
+// In MongoDB, element operators are used to query documents based on the existence, type, and values of fields within the documents. These operators help you work with fields that are arrays, null, missing, or have specific data types.
+
+//? 1: $exists: Matches documents that have a specific field, regardless of its value.
+
+// db.products.find({ price: { $exists: true } }).count();
+
+// Find documents with the "price" field present, and if it's present then check the value greater then 1200
+
+// db.products.find({ price: { $exists: true },cls price: { $gt: 1250 } });
+
+//? 2: $type: The $type operator filters documents based on the BSON data type of a field.
+// Basically we need to search or find the fields based on types (BSON Type) for example
+
+// db.products.find({ price: { $type: "string" } });
+// result will be 0, bcz the price type is number
+// db.products.find({ price: { $type: "number" } }).count()
+
+// 1: Double
+// 2: String
+// 3: Object
+// 4: Array
+// 5: Binary data
+// 6: Undefined
+// 7: Object id
+// 8: Boolean
+// 9: Date
+// 10: Null
+// 11: Regular expression
+// 12: JavaScript code
+// 13: Symbol
+// 14: JavaScript code with scope
+// 17: 64-bit integer
+
+// db.products.find({price:{$type:'number'}})
+// db.products.find({ price: { $type: "string" } });
+// result will be 0, bcz the price type is number
+// db.products.find({ price: { $type: "number" } }).count()
+// db.products.find({isFeatured:{$type:'bool'}}).count()
+//db.products.find({isFeatured:{$type:8}}).count()
+
+//? 3: $size: The $size operator matches documents where the size of an array field matches a specified value.
+// db.comments.find({comments: {$size:2}})
+
+//Projection:-
+
+db.comments.find({comments: {$size:2}},{comments:1})
+db.comments.find({comments: {$size:2}},{comments:1,_id:0})
+
+//Embedded Documents:-
+
+//* Embedded Documents (Dealing with Arrays & Object)
+
+//* Just use the dot notations, that’s it
+
+// ?1:  Find posts with comments by a specific user (Array)
+// db.comments.find({'comments.user': 'Alice'})
+
+//? 2: Find the documents where the views in metadata field > 1200. (Object)
+// db.comments.find({ "metadata.views": { $gt: 1200 } });
+
+//? 3: we need to find out the document where the user in comments = Henry and also the in the metadata likes value > 50.
+// db.comments.find({ 'comments.user':'Henry' , 'metadata.likes':{$gt: 50}  })
+
+//? 4:we need to return an comments array which must have this two (user = alice & vinod) elements only in it.
+//! We need to use $all operator. Here the order doesn’t’ matter.
+
+// db.comments.find({ "comments.user": { $all: ["Alice", "Vinod"] } });
+// db.comments.find({'comments.user': {$all: ['Alice','Vinod','Bob']}})
+
+//? 5:  In Array for multiple querying we user $elemMatch operator.
+//* Here is the syntax: {field: {$elemMatch: { {query1},{query2}..  }}}
+// db.comments.find({ comments: {$elemMatch: {'user':'Alice' , 'text':'Awesome article!'  } }  })
+//? by the wat you can write the same using simple way
+// db.comments.find({ 'comments.user':'Alice' , 'comments.text':'Awesome article!'  } )
+
+//db.comments.find({'comments.user':'Lily'})
+
+
+
+//Update Operations in MongoDB :-
+
+//* Updates
+
+//? 1: Updating a Single Field:
+//*  db.collectionName.updateOne(
+//    { _id: ObjectId("12345") },
+//   { $set: { fieldName: "new value" } }
+//  );
+
+//? Update the price value = 45 in a products collections, where the _id = ObjectId("64c2363be32f4a51b19b9271")
+shop> db.products.updateOne({_id:ObjectId("64c2363be32f4a51b19b9271")},{$set:{'price':45}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+shop> db.products.find({_id: ObjectId("64c2363be32f4a51b19b9271")})
+[
+  {
+    _id: ObjectId('64c2363be32f4a51b19b9271'),
+    name: 'Pet Grooming Kit',
+    company: '64c23350e32f4a51b19b923e',
+    price: 45,
+    colors: [ '#ffffff', '#ffcc00', '#99cc00' ],
+    image: '/images/product-pet-grooming.png',
+    category: '64c2342de32f4a51b19b9257',
+    isFeatured: false
+  }
+]
+//? Update the isFeatures value = true in a products collections, where the name = Designer Handbag
+db.products.updateOne({name: 'Designer Handbag'},{$set:{isFeatured:false}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+//* UpdateMany
+//? Update all the isFeatures value = true in a products collections, where the  price = 120
+ db.products.updateMany({price:120},{$set:{isFeatured:true}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 5,
+  modifiedCount: 4,
+  upsertedCount: 0
+//* Updating multiple fields in a document
+// db.collectionName.updateOne(
+//   { _id: ObjectId("12345") },
+//   {
+//     $set: {
+//       field1: "new value 1",
+//       field2: "new value 2",
+//     },
+//   }
+// );
+
+//? Update the price = 154 and isFeatures = false fields from the products collections where the name =  Unbranded Frozen Chicken.
+
+//* Renaming a field in a document.
+// syntax:  db.collectionName.updateOne(
+//     { _id: ObjectId("12345") },
+//     { $rename: { oldFieldName: "newFieldName" } }
+//   );
+
+db.products.updateMany({price:123},{$rename:{'isFeatured':'isFeature'}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 7,
+  modifiedCount: 7,
+  upsertedCount: 0
+//? Rename the products collection isFeatured field to isFeature, where the price = 123
+
+//* Adding a new field in a document
+// db.collectionName.updateOne(
+//     { _id: ObjectId("12345") },
+//     { $set: { newField: "new value" } }
+//   );
+
+//* Removing or Deleting the Field in a document
+// To remove a field from documents in MongoDB, you can use the $unset update operator.
+// db.collectionName.updateOne(
+//     { _id: ObjectId("12345") },
+//     { $unset: { fieldName: 1 } }
+//   );
+
+//* Update Embedded Documents
+//? How do you add a new element to an array using the $push operator?
+// db.collectionName.updateOne(
+//     { _id: ObjectId("12345") },
+//     { $push: { arrayField: "new element" } }
+//   );
+Example:-
+//PUSH
+ db.comments.updateOne({_id: 3},{$push:{comments:{user:'Eva',text:'subscribe to my channel'}}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+shop> db.comments.find().limit(1)
+[
+  {
+    _id: 3,
+    title: 'Getting Started with NoSQL Databases',
+    content: 'NoSQL databases provide flexible data models...',
+    author: 'Sarah Williams',
+    comments: [
+      { user: 'Eva', text: 'Very helpful!' },
+      { user: 'Frank', text: 'Clear explanations.' },
+      { user: 'Eva', text: 'subscribe to my channel' }
+    ],
+    metadata: { views: 1200, likes: 40 }
+  }
+]
+//:Pop
+shop> db.comments.updateOne({_id: 3},{$pop:{'comments':1}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+shop> db.comments.find().limit(1)
+[
+  {
+    _id: 3,
+    title: 'Getting Started with NoSQL Databases',
+    content: 'NoSQL databases provide flexible data models...',
+    author: 'Sarah Williams',
+    comments: [
+      { user: 'Eva', text: 'Very helpful!' },
+      { user: 'Frank', text: 'Clear explanations.' }
+    ],
+    metadata: { views: 1200, likes: 40 }
+  }
+]
+
+//? Popping from an Array: Removing the last element from an array in a document.
+// Syntax:  db.collectionName.updateOne(
+//   { _id: ObjectId("12345") },
+//   { $pop: { arrayField: 1 } }
+// );
+
+//? Updating a field within an embedded document.
+
+//? Update the text value within an comments array = "Awesome article!", where the id=7 & username=alice.
+shop> db.comments.updateOne({_id:7,'comments.user':'Alice'},{$set:{'comments.$.text':'Awesome Vats'}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+shop> db.comments.find({_id:7,'comments.user':'Alice'})
+[
+  {
+    _id: 7,
+    title: 'Introduction to MongoDB',
+    content: 'MongoDB is a popular NoSQL database...',
+    author: 'Vinod Thapa',
+    comments: [
+      { user: 'Alice', text: 'Awesome Vats' },
+      { user: 'Vinod', text: 'Thanks for sharing.' }
+    ],
+    metadata: { views: 1000, likes: 70 }
+  }
+]
+// Consider this part of the query: 'comments.$.text': 'Awesome Thapa!'
+
+// comments is the name of the array field.
+// $ is the positional operator, and it refers to the index of the array element that matches the query condition.
+// text is the field within the specific comment element that you want to update.
+$:positional operator
+
+db.comments.updateOne({_id: 3},{$set:{'user':'jessy'}})//ADD field
+ db.comments.updateOne({_id: 3},{$unset:{'user':1}})  //Delete field
+ 
+ 
+ //* Delete
+//? In MongoDB, the DELETE operations are used to remove documents from a collection. There are two main methods to perform deletion: deleteOne() and deleteMany().
+
+//* Delete a Single Document:
+//? syntax : db.collectionName.deleteOne({ _id: ObjectId("12345") });
+// db.sales.deleteOne({ _id: 1 });
+
+//* Delete Multiple Documents:
+//? Syntax: db.collectionName.deleteMany({ field: "value" });
+// db.sales.deleteMany({'price':55})
+
+//db.comments.deleteOne({_id: 7})
+{ acknowledged: true, deletedCount: 1 }
+
+ db.comments.updateOne({_id:2},{$unset:{metadata:1}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+db.products.deleteMany({price:55})
+{ acknowledged: true, deletedCount: 8 }
+
+//Indexes in MongoDB:-
+
+explain:-
+db.products.find({price:{$gt:100}}).explain()
+{
+  explainVersion: '1',
+  queryPlanner: {
+    namespace: 'shop.products',
+    indexFilterSet: false,
+    parsedQuery: { price: { '$gt': 100 } },
+    queryHash: 'A6287036',
+    planCacheKey: 'A6287036',
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    winningPlan: {
+      stage: 'COLLSCAN',
+      filter: { price: { '$gt': 100 } },
+      direction: 'forward'
+    },
+    rejectedPlans: []
+  },
+  command: {
+    find: 'products',
+    filter: { price: { '$gt': 100 } },
+    '$db': 'shop'
+  },
+  serverInfo: {
+    host: 'Vats',
+    port: 27017,
+    version: '7.0.7',
+    gitVersion: 'cfb08e1ab7ef741b4abdd0638351b322514c45bd'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted'
+  },
+  ok: 1
+}
+
+//Getting Indexes
+//?Did you realize that _id is already there? _id is automatically 
+added by mongodb and it is a default unique index.
+db.products.getIndexes()
+[ { v: 2, key: { _id: 1 }, name: '_id_' } ]
+shop> db.products.createIndex({'name':1})
+name_1
+shop> db.products.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { name: 1 }, name: 'name_1' }
+]
+
+// ********************************************
+//* Aggregation Framework
+// ********************************************
+
+// The Aggregation Framework is a powerful feature in MongoDB that allows you to process and analyze data in a highly flexible and efficient manner. It provides a set of pipeline stages that enable you to perform data transformations, group data, and perform various calculations on collections.
+
+// In MongoDB's aggregation framework, $match, $group, and $unwind are referred to as aggregation operators. They are used as stages in the aggregation pipeline to perform specific operations on the data.
+
+//* Aggregation Operations
+//? $match
+//? The $match stage filters documents based on specified conditions.
+
+//? Retrieve all products with a name = Sleek Wooden Tuna.
+
+// db.products.aggregate([
+//     {
+//       $match: {
+//         'name':'Sleek Wooden Tuna'
+//       }
+//     }
+//   ])
+
+//? Retrieve all products with a price greater than 50.
+//   db.products.aggregate([
+//     { $match: { price: { $gt: 50 } } }
+//   ]);
+
+
+💖 Thank You So Much For Choosing My Video 💖
+
+Hi everyone,
+
+I'm absolutely thrilled – we're almost at 600K subscribers for our MongoDB course! This course was a true labor of love, and it's been amazing to see how it's helping you all.
+
+If you've enjoyed what we're doing and want to be part of our journey, hitting that Subscribe button would mean the world to me. Let's keep growing and learning together!
+Here is the link: https://www.youtube.com/thapatechnical
+
+With gratitude,
+Thapa Technical 
+
+//* $group
+// The $group stage groups documents by specified fields and performs aggregation functions. it is like the reduce methods in JS
+
+// when dealing with $group stage we need to pass $sign for our existing field not the one we are going to create
+// syntax :
+//  {
+//   $group:
+//     {
+//       _id: <expression>, // Group key
+//       <field1>: { <accumulator1> : <expression1> },
+//       ...
+//     }
+//  }
+
+// https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/group/#considerations
+
+db.products.aggregate([
+  { $match: { price: { $gt: 900 } } },
+  {
+    $group: {
+      _id: { sameCompany: "$company" },
+      totalPrice: { $sum: "$price" },
+    },
+  },
+]);
+
+// let's use another accumulator operations
+// $avg
+
+// find the quantity = 5, group them with
+ same quantity and find the average price
+
+db.sales.aggregate([{ $match: { quantity: { $eq: 5 } } }]);
+// both are same
+db.sales.aggregate([
+  { $match: { quantity: 5 } },
+  {
+    $group: {
+      _id: { quan: "$quantity" },
+      avgPrice: { $avg: "$price" },
+    },
+  },
+]);
+
+//* $sort
+
+db.products.aggregate([
+  { $match: { price: { $gt: 1200 } } },
+  {
+    $group: {
+      _id: "$category",
+      totalPrice: { $sum: "$price" },
+    },
+  },
+  { $sort: { totalPrice: 1 } },
+]);
+
+// $sort is like .sort() but you can even sort 
+the values that you added in group. 
+(Of course you can also sort before 
+grouping or with any other values. But 
+here you can even sort in ascending or 
+descending based on number of products it has.
+
+db.products.aggregate([
+  { $match: { price: { $gt: 1200 } } },
+  {
+    $group: {
+      _id: "$category",
+      totalPrice: { $sum: "$price" },
+    },
+  },
+  { $sort: { totalPrice: -1 } },
+]);
+
+//* $project
+
+db.products.aggregate([
+  {
+    $project: {
+      _id: 0,
+      price: 1,
+      name: 1,
+    },
+  },
+]);
+
+// We can use the $project stage to create new fields by applying expressions or transformations to existing fields. For example, you could calculate the discounted price as a new field:
+
+db.products.aggregate([
+  { $match: { price: { $gt: 1000 } } },
+  {
+    $project: {
+      _id: 0,
+      name: 1,
+      originalPrice: "$price",
+      disPrice: { $multiply: ["$price", 0.8] },
+    },
+  },
+]);
+
+// again we can add the sort here too
+
+db.products.aggregate([
+  { $match: { price: { $gt: 1000 } } },
+  {
+    $project: {
+      _id: 0,
+      name: 1,
+      originalPrice: "$price",
+      disPrice: { $multiply: ["$price", 0.8] },
+    },
+  },
+  { $sort: { disPrice: -1 } },
+]);
+
+//* $push and $unwind
+//? Find documents with a price greater than 1200, then group them by price and create an array of colors for each group.
+
+//* Before
+//* if price = 1250 =>  colors: [ '#000000', '#cc6600', '#663300' ],
+//* if price = 1250 =>  colors: [ '#fff000', '#ddddd', '#663300' ],
+
+//? After,  I need a new document where
+{
+  price: 1250,
+  allColors: ['#000000', '#cc6600', '#663300', '#fff000', '#ddddd', '#663300' ]
+}
+
+// code
+db.products.aggregate([
+  { $match: { price: { $gt: 1200 } } },
+  {
+    $group: {
+      _id: { priceGroup: "$price" },
+      colors: { $push: "$colors" },
+    },
+  },
+]);
+
+//* $unwind
+
+db.products.aggregate([
+  { $match: { price: { $gt: 1200 } } },
+  { $unwind: "$colors" },
+  {
+    $group: {
+      _id: { priceGroup: "$price" },
+      colors: { $push: "$colors" },
+    },
+  },
+]);
+
+//?  Before
+{
+  _id: ObjectId("64c23601e32f4a51b19b9263"),
+  name: 'Laptop Pro',
+  company: '64c23350e32f4a51b19b9231',
+  price: 1299,
+  colors: [ '#333333', '#cccccc', '#00ff00' ],
+  image: '/images/product-laptop.png',
+  category: '64c2342de32f4a51b19b924e',
+  isFeatured: true
+},
+
+//! $unwind: '$colors';
+//? the $unwind stage deconstructs the "colors" array, creating multiple documents for each color within a product.
+
+//?  After
+{
+  _id: ObjectId("64c23601e32f4a51b19b9263"),
+  name: 'Laptop Pro',
+  company: '64c23350e32f4a51b19b9231',
+  price: 1299,
+  colors: '#333333',
+  image: '/images/product-laptop.png',
+  category: '64c2342de32f4a51b19b924e',
+  isFeatured: true
+},
+
+// {
+//   _id: ObjectId("64c23601e32f4a51b19b9263"),
+//   name: 'Laptop Pro',
+//   company: '64c23350e32f4a51b19b9231',
+//   price: 1299,
+//   colors: '#cccccc',
+//   image: '/images/product-laptop.png',
+//   category: '64c2342de32f4a51b19b924e',
+//   isFeatured: true
+// },
+
+// so now all the colors are in a string format, so $push will add them as an element in an array of colors
+
+db.products.aggregate([
+  { $match: { price: { $gt: 1200 } } },
+  { $unwind: "$colors" },
+  {
+    $group: {
+      _id: null,
+      totalCount: { $sum: 1 },
+    },
+  },
+]);
+
+db.products.aggregate([
+  { $match: { price: { $gt: 1200 } } },
+  { $unwind: "$colors" },
+  {
+    $group: {
+      _id: { priceGroup: "$price" },
+      colors: { $push: "$colors" },
+    },
+  },
+]);
+
+//* $addToSet
+// still there is a problem and that is we are also getting the duplicates values so to remove it we will use the $addToSet
+
+db.products.aggregate([
+  { $match: { price: { $gt: 1200 } } },
+  { $unwind: "$colors" },
+  {
+    $group: {
+      _id: { priceGroup: "$price" },
+      colors: { $addToSet: "$colors" },
+    },
+  },
+]);
+
+//* $size
+// What If we want to count the number of unique colors for each price group
+db.products.aggregate([
+  { $match: { price: { $gt: 1200 } } },
+  { $unwind: "$colors" },
+  {
+    $group: {
+      _id: { priceGroup: "$price" },
+      colors: { $addToSet: "$colors" },
+      colorLength: { $size: "$colors" },
+    },
+  },
+]);
+
+// we can't do this, bcz the $size operator is not allowed directly within the $group stage. Instead,
+// you can use it in combination with other aggregation operators or in separate pipeline stages.
+
+db.products.aggregate([
+  { $match: { price: { $gt: 1200 } } },
+  { $unwind: "$colors" },
+  {
+    $group: {
+      _id: { priceGroup: "$price" },
+      allColors: { $addToSet: "$colors" },
+    },
+  },
+  {
+    $project: {
+      _id: 1,
+      allColors: 1,
+      colorLength: { $size: "$allColors" },
+    },
+  },
+  { $limit: 1 },
+]);
+
+//! very Important in project stage we are only getting two fields and the name of the fields has to match with the fields names in group stage. ex. allColors fields
+
+//* limit
+
+db.products.aggregate([
+  { $match: { price: { $gt: 1200 } } },
+  { $unwind: "$colors" },
+  {
+    $group: {
+      _id: { priceGroup: "$price" },
+      allColors: { $addToSet: "$colors" },
+    },
+  },
+  {
+    $project: {
+      _id: 1,
+      allColors: 1,
+      colorLength: { $size: "$allColors" },
+    },
+  },
+  { $limit: 1 },
+]);
+
+//* skip
+
+db.products.aggregate([
+  { $match: { price: { $gt: 1200 } } },
+  { $unwind: "$colors" },
+  {
+    $group: {
+      _id: { priceGroup: "$price" },
+      allColors: { $addToSet: "$colors" },
+    },
+  },
+  {
+    $project: {
+      _id: 1,
+      allColors: 1,
+      colorLength: { $size: "$allColors" },
+    },
+  },
+  { $skip: 1 },
+]);
+
+//* $filter
+db.col.aggregate([
+  {
+    $project: {
+      name: 1,
+      values: {
+        $filter: {
+          input: "$values",
+          as: "value",
+          cond: { $gt: ["$$value", 30] },
+        },
+      },
+    },
+  },
+]);
+
+
+
+ 
